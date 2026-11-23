@@ -1,8 +1,7 @@
 # 本机工作流备份
 
 一套在 Windows 11 单机上长期打磨出来的「个人 AI / 自动化工作流」源码备份。
-所有脚本都在真机跑通过，附带踩坑记录。**已脱敏**：家目录、账号口令、令牌、
-内网 IP、设备主机名全部替换为占位符，详见 [DESENSITIZE.md](DESENSITIZE.md)。
+所有脚本都在真机跑通过，附带踩坑记录。详见 [DESENSITIZE.md](DESENSITIZE.md)。
 
 - 宿主环境：Windows 11（PowerShell 5.1 为主）、Python 3.13、Node 20、JDK 17、Android SDK 36
 - 显卡：NVIDIA RTX 5080 Laptop 16 GB（脚本里的显存/速度数据都基于这张卡）
