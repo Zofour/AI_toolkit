@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- 局域网 / Tailscale 均为 ws:// 明文，需放行；对外安全由 Tailscale + token 保障 -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

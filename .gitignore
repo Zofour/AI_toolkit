@@ -1,0 +1,45 @@
+# 本地配置与凭据（不要提交）
+config.json
+!config.example.json
+local.properties
+key.properties
+keystore*
+*.jks
+*.pem
+*.key
+bili_sessdata.txt
+cookies*.txt
+
+# 构建产物
+build/
+.gradle/
+node_modules/
+dist/
+out/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.kotlin/
+.cxx/
+*.apk
+*.aab
+
+# 运行产物与日志
+*.log
+*.err
+data/
+cache/
+_selftest/
+*_selftest/
+history.json
+*.jsonl
+*.db
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

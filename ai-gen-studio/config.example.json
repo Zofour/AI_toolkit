@@ -1,0 +1,24 @@
+{
+  "port": 5000,
+  "remote_port": 8848,
+  "comfy_url": "http://127.0.0.1:8000",
+  "ollama_url": "http://127.0.0.1:11434",
+  "save_dir": "",
+  "temp_dir": "D:\\image_temp",
+  "negative": "worst quality, low quality, blurry, jpeg artifacts, watermark, text, signature",
+  "ckpt_dirs": [
+    "C:\\Users\\yourname\\Documents\\ComfyUI\\models\\checkpoints",
+    "D:\\Comfy-Desktop\\ComfyUI-Shared\\models\\checkpoints",
+    "C:\\Users\\yourname\\Desktop\\else\\SD-WEBUI-AKI-V5.0\\sd-webui-aki-v4.10\\models\\Stable-diffusion"
+  ],
+  "defaults": {
+    "width": 512,
+    "height": 512,
+    "steps": 15,
+    "cfg": 7.0,
+    "sampler": "euler",
+    "scheduler": "normal",
+    "batch": 1,
+    "denoise": 0.6
+  }
+}

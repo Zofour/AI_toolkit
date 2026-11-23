@@ -1,0 +1,16 @@
+{
+  "name": "我的电脑",
+  "port": 8730,
+  "bind": "0.0.0.0",
+  "token": "CHANGE_ME",
+  "thumb_quality": 82,
+  "move_to_desktop": 1,
+  "auto_drives": true,
+  "roots": {
+    "图片": "C:/Users/yourname/Pictures",
+    "视频": "C:/Users/yourname/Videos",
+    "桌面": "C:/Users/yourname/Desktop",
+    "下载": "C:/Users/yourname/Downloads",
+    "AI生图": "D:/image_temp"
+  }
+}

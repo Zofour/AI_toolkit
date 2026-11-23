@@ -1,0 +1,12 @@
+{
+  "bind_host": "0.0.0.0",
+  "port": 8787,
+  "token": "CHANGE_ME",
+  "upstream_base": "https://api.deepseek.com/v1",
+  "forward_authorization": true,
+  "ntfy_url": "https://ntfy.sh",
+  "ntfy_topic": "",
+  "session_buffer_events": 3000,
+  "data_dir": "data",
+  "log_bodies": false
+}

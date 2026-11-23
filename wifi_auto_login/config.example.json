@@ -1,0 +1,14 @@
+{
+  "portal": "https://tree.buct.edu.cn",
+  "ac_id": "20",
+  "username": "2025000000",
+  "password": "CHANGE_ME",
+  "check_interval": 15,
+  "retry_interval": 20,
+  "max_retry_interval": 300,
+  "timeout": 8,
+  "verify_ssl": false,
+  "skip_if_public_ip": true,
+  "device": "Windows 10",
+  "platform": "Windows"
+}

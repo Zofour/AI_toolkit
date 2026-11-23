@@ -1,0 +1,24 @@
+{
+  "enabled": false,
+  "mounted": [],
+  "known": [
+    {
+      "name": "anima-turbo-lora-v0.2.safetensors",
+      "strength": 0.8,
+      "last": "2026-11-12 20:56"
+    },
+    {
+      "name": "air_bjob.pt",
+      "strength": 0.55,
+      "last": "2026-11-12 20:43"
+    },
+    {
+      "name": "abcd_style.safetensors",
+      "strength": 0.8,
+      "last": "2026-11-12 20:43"
+    }
+  ],
+  "aliases": {
+    "abcd_style.safetensors": "1画风"
+  }
+}

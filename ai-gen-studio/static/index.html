@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Gen Studio · 文本模型 + ComfyUI 生图</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">🎨 AI Gen Studio</div>
+
+  <div class="picker">
+    <label>文本模型</label>
+    <select id="textModel"></select>
+  </div>
+
+  <div class="picker">
+    <label>生图模型</label>
+    <select id="imageModel"></select>
+  </div>
+
+  <button class="btn ghost sm" id="btnRefreshModels" title="重新扫描 Ollama 与 ComfyUI 的模型列表（新增模型后点这里）">🔄 刷新模型</button>
+
+  <div class="modes">
+    <label class="mode"><input type="radio" name="mode" value="1" checked> 模式1 · 提示词生成</label>
+    <label class="mode" id="modeWrap2" title="仅识图模型可用">
+      <input type="radio" name="mode" value="2" id="mode2Radio"> 模式2 · 自动评判
+    </label>
+  </div>
+
+  <div class="status">
+    <span class="dot" id="dotOllama" title="Ollama"></span><span class="lbl">Ollama</span>
+    <span class="dot" id="dotComfy" title="ComfyUI"></span><span class="lbl">ComfyUI</span>
+    <span class="dot" id="dotWs" title="ComfyUI WebSocket"></span><span class="lbl">进度</span>
+    <button class="btn ghost sm" id="btnSettings">⚙ 设置</button>
+  </div>
+</header>
+
+<main class="grid">
+
+  <!-- 左：需求输入 -->
+  <section class="panel">
+    <h3>① 原始需求（中文）</h3>
+    <textarea id="requirement" placeholder="例：一个在雨夜霓虹街道上撑伞的赛博朋克少女，回头看向镜头，电影感，高细节"></textarea>
+
+    <div class="row">
+      <label>提示词风格</label>
+      <div class="seg" id="styleSeg">
+        <button class="segbtn active" data-style="tags" title="逗号分隔的英文标签，如：1girl, solo, silver hair, neon lights, masterpiece">标签式（词, 词, 词）</button>
+        <button class="segbtn" data-style="sentence" title="完整的自然语言描述句">描述句</button>
+        <button class="segbtn" data-style="auto" title="SD 系→标签式；Z-Image/anima→描述句">跟随模型</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>生成条数</label>
+      <input type="number" id="promptCount" value="4" min="1" max="10" step="1">
+      <span class="hint">1–10</span>
+      <button class="btn primary" id="btnGenPrompts">生成提示词</button>
+    </div>
+
+    <div id="thinkBox" class="think hidden">
+      <div class="thinkHead">模型思考过程 <span class="hint">（实时，不截断）</span></div>
+      <pre id="thinkText"></pre>
+    </div>
+
+    <div class="sep"></div>
+
+    <h3>② 生图方式</h3>
+    <div class="seg" id="ioSeg">
+      <button class="segbtn active" data-io="txt2img">文生图</button>
+      <button class="segbtn" data-io="img2img">图生图</button>
+    </div>
+
+    <div id="inputPane" class="hidden">
+      <div class="drop" id="drop">
+        <input type="file" id="fileInput" accept="image/*" hidden>
+        <img id="inImg" class="hidden">
+        <div id="dropHint">点击或拖入图片</div>
+      </div>
+      <div class="row">
+        <label>重绘幅度 denoise</label>
+        <input type="number" id="denoise" value="0.6" min="0.01" max="1" step="0.01">
+      </div>
+      <div class="hint" id="inInfo"></div>
+    </div>
+  </section>
+
+  <!-- 中：提示词 -->
+  <section class="panel">
+    <h3>③ AI 生成提示词（英文）<span class="hint" id="pmHint"></span></h3>
+    <div class="row"><label>负向提示词</label><input id="negative" style="flex:1" placeholder="worst quality, low quality, blurry, watermark…"></div>
+    <div id="promptList" class="promptList"><div class="empty">点「生成提示词」后在这里列出候选…</div></div>
+    <div class="row wrap">
+      <button class="btn" id="btnBatch">批量生图（勾选项，逐个）</button>
+      <button class="btn primary" id="btnStartMode2" style="display:none">▶ 开始自动评判循环</button>
+      <button class="btn danger" id="btnStop" style="display:none">■ 停止</button>
+    </div>
+
+    <div id="loopBox" class="loop hidden">
+      <div class="loopHead">模式2 循环日志</div>
+      <div id="loopLog" class="loopLog"></div>
+    </div>
+  </section>
+
+  <!-- 右：结果 -->
+  <section class="panel">
+    <h3>④ 结果预览</h3>
+    <div class="stage">
+      <img id="bigImg" alt="">
+      <div id="stageHint" class="empty">还没有生成的图片</div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="row">
+      <button class="btn" id="btnPrev">◀ 上一张</button>
+      <button class="btn" id="btnNext">下一张 ▶</button>
+      <button class="btn primary" id="btnSave">💾 保存当前</button>
+    </div>
+    <div class="row">
+      <button class="btn" id="btnSavePhone">📲 存到手机</button>
+      <button class="btn" id="btnSavePhoneAll">📲 存整批</button>
+      <span class="hint" id="phoneHint"></span>
+    </div>
+    <div class="row">
+      <span class="hint" id="imgMeta"></span>
+      <span class="hint" id="saveInfo"></span>
+    </div>
+  </section>
+
+</main>
+
+<!-- 底部参数 + 进度 -->
+<footer class="bottombar">
+  <div class="params">
+    <label>宽 <input type="number" id="pWidth" value="512" min="64" max="4096" step="64"></label>
+    <label>高 <input type="number" id="pHeight" value="512" min="64" max="4096" step="64"></label>
+    <label>步数 <input type="number" id="pSteps" value="25" min="1" max="200"></label>
+    <label>CFG <input type="number" id="pCfg" value="7" min="0" max="30" step="0.5"></label>
+    <label>采样器 <select id="pSampler"></select></label>
+    <label>调度器 <select id="pScheduler"></select></label>
+    <label>种子 <input type="number" id="pSeed" value="-1" title="-1 = 随机"></label>
+    <label>张数 <input type="number" id="pBatch" value="1" min="1" max="16"></label>
+    <span class="hint" id="autoSizeHint"></span>
+  </div>
+  <div class="progressWrap">
+    <div class="bar"><div class="fill" id="barFill"></div></div>
+    <div class="progText" id="progText">空闲</div>
+  </div>
+</footer>
+
+<!-- 设置弹窗 -->
+<div class="modal hidden" id="modal">
+  <div class="modalBox">
+    <h3>设置</h3>
+    <label>ComfyUI 地址 <input id="cfgComfy"></label>
+    <label>Ollama 地址 <input id="cfgOllama"></label>
+    <label>临时目录（所有生成图都会存这里） <input id="cfgTemp"></label>
+    <label>正式保存目录（「保存」按钮 + 模式2 达标图） <input id="cfgSave"></label>
+    <label>默认宽 <input id="cfgW" type="number"></label>
+    <label>默认高 <input id="cfgH" type="number"></label>
+    <label>默认步数 <input id="cfgSteps" type="number"></label>
+    <div class="row right">
+      <button class="btn" id="btnCloseModal">取消</button>
+      <button class="btn primary" id="btnSaveCfg">保存设置</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
